@@ -19,129 +19,129 @@
   </a>
 </p>
 
-<p align="center">One interface for all your Claude Code, Codex and OpenCode agents.</p>
+<p align="center">统一管理 Claude Code、Codex 和 OpenCode 代理的单一界面。</p>
 
 <p align="center">
-  <img src="https://paseo.sh/hero-mockup.png" alt="Paseo app screenshot" width="100%">
+  <img src="https://paseo.sh/hero-mockup.png" alt="Paseo 应用截图" width="100%">
 </p>
 
 <p align="center">
-  <img src="https://paseo.sh/mobile-mockup.png" alt="Paseo mobile app" width="100%">
+  <img src="https://paseo.sh/mobile-mockup.png" alt="Paseo 移动端应用" width="100%">
 </p>
 
 ---
 
-Run agents in parallel on your own machines. Ship from your phone or your desk.
+让多个代理在你自己的机器上并行运行。无论你在手机前还是电脑前，都能随时推进工作。
 
-- **Self-hosted:** Agents run on your machine with your full dev environment. Use your tools, your configs, and your skills.
-- **Multi-provider:** Claude Code, Codex, and OpenCode through the same interface. Pick the right model for each job.
-- **Voice control:** Dictate tasks or talk through problems in voice mode. Hands-free when you need it.
-- **Cross-device:** iOS, Android, desktop, web, and CLI. Start work at your desk, check in from your phone, script it from the terminal.
-- **Privacy-first:** Paseo doesn't have any telemetry, tracking, or forced log-ins.
+- **自托管：** 代理直接运行在你的机器上，使用你现有的开发环境、工具、配置和技能。
+- **多 Provider：** 在同一个界面中统一接入 Claude Code、Codex 和 OpenCode，为不同任务选择合适的模型与代理。
+- **语音控制：** 可通过语音输入任务或边说边梳理问题，需要时可以解放双手。
+- **跨设备：** 支持 iOS、Android、桌面端、Web 和 CLI。你可以在电脑上开始任务，在手机上查看进度，也可以在终端中脚本化操作。
+- **隐私优先：** Paseo 不包含遥测、追踪或强制登录。
 
-## Getting Started
+## 快速开始
 
-Paseo runs a local server called the daemon that manages your coding agents. Clients like the desktop app, mobile app, web app, and CLI connect to it.
+Paseo 会运行一个本地服务，称为 `daemon`，专门负责管理你的编码代理。桌面端、移动端、Web 端和 CLI 等客户端都通过它进行连接。
 
-### Prerequisites
+### 前置条件
 
-You need at least one agent CLI installed and configured with your credentials:
+你至少需要安装并配置好一个代理 CLI，并确保已经完成凭据配置：
 
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code)
 - [Codex](https://github.com/openai/codex)
 - [OpenCode](https://github.com/anomalyco/opencode)
 
-### Desktop app (recommended)
+### 桌面应用（推荐）
 
-Download it from [paseo.sh/download](https://paseo.sh/download) or the [GitHub releases page](https://github.com/getpaseo/paseo/releases). Open the app and the daemon starts automatically. Nothing else to install.
+可从 [paseo.sh/download](https://paseo.sh/download) 或 [GitHub Releases](https://github.com/getpaseo/paseo/releases) 下载。打开应用后，`daemon` 会自动启动，不需要额外安装其他组件。
 
-To connect from your phone, scan the QR code shown in Settings.
+如果要从手机连接，只需扫描设置页中展示的二维码。
 
-### CLI / headless
+### CLI / 无头模式
 
-Install the CLI and start Paseo:
+安装 CLI 并启动 Paseo：
 
 ```bash
 npm install -g @getpaseo/cli
 paseo
 ```
 
-This shows a QR code in the terminal. Connect from any client. This path is useful for servers and remote machines.
+终端中会显示一个二维码，任意客户端都可以通过它连接。这个方式特别适合服务器或远程机器。
 
-For full setup and configuration, see:
-- [Docs](https://paseo.sh/docs)
-- [Configuration reference](https://paseo.sh/docs/configuration)
+完整安装与配置说明见：
+- [文档](https://paseo.sh/docs)
+- [配置参考](https://paseo.sh/docs/configuration)
 
-## CLI
+## 命令行（CLI）
 
-Everything you can do in the app, you can do from the terminal.
+应用里能做的事情，基本都可以在终端里完成。
 
 ```bash
-paseo run --provider claude/opus-4.6 "implement user authentication"
-paseo run --provider codex/gpt-5.4 --worktree feature-x "implement feature X"
+paseo run --provider claude/opus-4.6 "实现用户认证"
+paseo run --provider codex/gpt-5.4 --worktree feature-x "实现功能 X"
 
-paseo ls                           # list running agents
-paseo attach abc123                # stream live output
-paseo send abc123 "also add tests" # follow-up task
+paseo ls                       # 列出正在运行的代理
+paseo attach abc123            # 实时查看输出流
+paseo send abc123 "顺便补上测试" # 继续追加后续任务
 
-# run on a remote daemon
-paseo --host workstation.local:6767 run "run the full test suite"
+# 在远程 daemon 上运行
+paseo --host workstation.local:6767 run "运行完整测试套件"
 ```
 
-See the [full CLI reference](https://paseo.sh/docs/cli) for more.
+更多内容请参考 [完整 CLI 文档](https://paseo.sh/docs/cli)。
 
-## Orchestration skills (Unstable)
+## 编排技能（不稳定）
 
-Experimental skills that teach agents how to use the Paseo CLI to orchestrate other agents. I am updating these very frequently as I learn new things, expect changes without notice, might be coupled to my own setup, use at your own risk.
+这里提供了一些实验性技能，用来教代理如何通过 Paseo CLI 编排其他代理。我还在持续快速迭代这些技能，接口和行为可能随时变化，也可能和我自己的使用环境耦合，请自行评估风险。
 
 ```bash
 npx skills add getpaseo/paseo
 ```
 
-Then use them in any agent conversation:
+然后你就可以在任意代理对话中这样使用：
 
 ```bash
-# Use handoff when you discuss something with an agent but want another one to implement.
-# I use this to plan with Claude and then handoff to Codex to implement.
-/paseo-handoff hand off the authentication fix to codex 5.4 in a worktree
+# handoff 适合先和一个代理讨论，再把实现工作交给另一个代理。
+# 例如先用 Claude 做规划，再交给 Codex 实现。
+/paseo-handoff 把认证修复任务交给 codex 5.4，在 worktree 里完成
 
-# Use loops when you have clear acceptance criteria (aka Ralph loops).
-/paseo-loop loop a codex agent to fix the backend tests, use sonnet to verify, max 10 iterations
+# loop 适合有明确验收标准的循环任务（也就是 Ralph loops）。
+/paseo-loop 循环运行一个 codex agent 来修复后端测试，用 sonnet 做校验，最多 10 轮
 
-# Orchestrator teaches the agent how to create teams and manage them via a chat room.
-# Very opinionated and expects both Codex and Claude to work.
-/paseo-orchestrator spin up a team to implement the database refactor, use chat to coordinate. use claude to plan and codex to implement and review
+# orchestrator 用于拉起一个团队，并通过聊天室协调多个代理协作。
+# 这个模式约束更强，默认假设 Claude 和 Codex 都可用。
+/paseo-orchestrator 拉起一个团队来完成数据库重构，用聊天协调；用 claude 做规划，用 codex 做实现和 review
 ```
 
-## Development
+## 开发
 
-Quick monorepo package map:
-- `packages/server`: Paseo daemon (agent process orchestration, WebSocket API, MCP server)
-- `packages/app`: Expo client (iOS, Android, web)
-- `packages/cli`: `paseo` CLI for daemon and agent workflows
-- `packages/desktop`: Electron desktop app
-- `packages/relay`: Relay package for remote connectivity
-- `packages/website`: Marketing site and documentation (`paseo.sh`)
+Monorepo（单仓库）中各主要包的职责如下：
+- `packages/server`: Paseo daemon，负责代理进程编排、WebSocket API 和 MCP 服务
+- `packages/app`: Expo 客户端（iOS、Android、Web）
+- `packages/cli`: `paseo` CLI，用于 daemon 管理与代理工作流操作
+- `packages/desktop`: Electron 桌面应用
+- `packages/relay`: 用于远程连接的 Relay 包
+- `packages/website`: 官网与文档站点（`paseo.sh`）
 
-Common commands:
+常用命令：
 
 ```bash
-# run all local dev services
+# 启动所有本地开发服务
 npm run dev
 
-# run individual surfaces
+# 分别启动单个端
 npm run dev:server
 npm run dev:app
 npm run dev:desktop
 npm run dev:website
 
-# build the daemon
+# 构建 daemon
 npm run build:daemon
 
-# repo-wide checks
+# 仓库级检查
 npm run typecheck
 ```
 
-## License
+## 许可证
 
 AGPL-3.0
