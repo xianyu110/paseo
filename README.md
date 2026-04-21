@@ -137,7 +137,17 @@ paseo wechat-login
 paseo wechat-login --host 127.0.0.1:6767
 ```
 
-## CLI
+登录完成后，可以继续用下面两条命令查看状态：
+
+```bash
+# 查看已登录微信账号和在线状态
+paseo wechat status
+
+# 查看“微信用户 -> agent 会话”的映射关系
+paseo wechat sessions
+```
+
+## 命令行（CLI）
 
 应用里能做的事情，基本都可以在终端里完成。
 
@@ -205,6 +215,16 @@ npm run build:daemon
 
 # 仓库级类型检查
 npm run typecheck
+```
+
+如果你要在 macOS 上本地构建桌面安装包，可以使用：
+
+```bash
+# 先构建 Web 资源
+npm run build:web --workspace=@getpaseo/app
+
+# 再构建桌面安装包（Apple Silicon 示例）
+npm run build --workspace=@getpaseo/desktop -- --publish never --mac --arm64 -c.mac.notarize=false -c.mac.identity=null
 ```
 
 ## 许可证

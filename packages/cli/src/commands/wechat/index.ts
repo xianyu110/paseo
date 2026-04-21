@@ -7,6 +7,7 @@ import {
 } from "../../utils/command-options.js";
 import { withOutput } from "../../output/index.js";
 import { runWeChatLoginCommand } from "./login.js";
+import { runWeChatSessionsCommand } from "./sessions.js";
 import { runWeChatStatusCommand } from "./status.js";
 
 export function addWeChatLoginOptions(command: Command): Command {
@@ -46,6 +47,12 @@ export function createWeChatCommand(): Command {
       .command("status")
       .description("Show connected WeChat accounts and runtime status"),
   ).action(withOutput(runWeChatStatusCommand));
+
+  addJsonAndDaemonHostOptions(
+    wechat
+      .command("sessions")
+      .description("Show WeChat peer-to-agent session mappings"),
+  ).action(withOutput(runWeChatSessionsCommand));
 
   return wechat;
 }

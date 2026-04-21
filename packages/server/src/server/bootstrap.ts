@@ -473,6 +473,7 @@ export async function createPaseoDaemon(
     await wechatService?.initialize();
     if (wechatService) {
       app.get("/api/wechat/accounts", wechatService.listAccountsHandler());
+      app.get("/api/wechat/sessions", wechatService.listSessionsHandler());
       app.post("/api/wechat/login/start", wechatService.startLoginHandler());
       app.post("/api/wechat/login/wait", wechatService.waitLoginHandler());
       logger.info("WeChat HTTP endpoints mounted on main app");

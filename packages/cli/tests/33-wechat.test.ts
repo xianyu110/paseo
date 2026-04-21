@@ -100,6 +100,28 @@ const server = http.createServer((req, res) => {
       return;
     }
 
+    if (req.method === "GET" && req.url === "/api/wechat/sessions") {
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(
+        JSON.stringify({
+          sessions: [
+            {
+              accountId: "bot123-im-bot",
+              accountUserId: "owner@im.wechat",
+              peerId: "user001@im.wechat",
+              agentId: "agent-1",
+              agentTitle: "WeChat user001@im.wechat",
+              agentStatus: "idle",
+              contextTokenPresent: true,
+              createdAt: "2026-04-20T12:00:00.000Z",
+              updatedAt: "2026-04-20T12:03:00.000Z",
+            },
+          ],
+        }),
+      );
+      return;
+    }
+
     res.writeHead(404, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ error: "not found" }));
   });
@@ -189,6 +211,27 @@ try {
     assert.strictEqual(payload.accounts[0]?.enabled, true);
     assert.strictEqual(requests[4]?.path, "/api/wechat/accounts");
     console.log("✓ wechat status lists connected accounts\n");
+  }
+
+  // Test 5: sessions should list peer-to-agent mappings
+  {
+    console.log("Test 5: wechat sessions lists peer mappings");
+    const result = await runCli([
+      "wechat",
+      "sessions",
+      "--host",
+      `127.0.0.1:${address.port}`,
+      "--json",
+    ]);
+    assert.strictEqual(result.exitCode, 0, "wechat sessions should succeed");
+    const payload = JSON.parse(result.stdout);
+    assert(Array.isArray(payload.sessions), "json output should contain sessions array");
+    assert.strictEqual(payload.sessions.length, 1, "sessions should return one mapping");
+    assert.strictEqual(payload.sessions[0]?.agentId, "agent-1");
+    assert.strictEqual(payload.sessions[0]?.peerId, "user001@im.wechat");
+    assert.strictEqual(payload.sessions[0]?.agentStatus, "idle");
+    assert.strictEqual(requests[5]?.path, "/api/wechat/sessions");
+    console.log("✓ wechat sessions lists peer mappings\n");
   }
 } finally {
   await new Promise<void>((resolve, reject) => {

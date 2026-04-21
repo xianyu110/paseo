@@ -81,6 +81,39 @@ export class PaseoWeChatService {
     };
   }
 
+  listSessionsHandler(): RequestHandler {
+    return async (_req, res) => {
+      const [accounts, peerSessions] = await Promise.all([
+        this.store.listAccounts(),
+        this.store.listPeerSessions(),
+      ]);
+      const accountById = new Map(accounts.map((account) => [account.id, account]));
+
+      const sessions = await Promise.all(
+        peerSessions.map(async (session) => {
+          const account = accountById.get(session.accountId) ?? null;
+          const liveAgent = this.agentManager.getAgent(session.agentId);
+          const storedAgent = liveAgent ? null : await this.agentStorage.get(session.agentId);
+
+          return {
+            accountId: session.accountId,
+            accountUserId: account?.userId ?? null,
+            peerId: session.peerId,
+            agentId: session.agentId,
+            agentTitle: liveAgent?.config.title ?? storedAgent?.title ?? null,
+            agentStatus: liveAgent?.lifecycle ?? storedAgent?.lastStatus ?? null,
+            contextTokenPresent:
+              typeof session.contextToken === "string" && session.contextToken.trim().length > 0,
+            createdAt: session.createdAt,
+            updatedAt: session.updatedAt,
+          };
+        }),
+      );
+
+      res.json({ sessions });
+    };
+  }
+
   startLoginHandler(): RequestHandler {
     return async (req, res) => {
       try {
@@ -343,12 +376,12 @@ export class PaseoWeChatService {
         direction: "tail",
         limit: 200,
       });
-      for (let index = timeline.entries.length - 1; index >= 0; index -= 1) {
-        const entry = timeline.entries[index];
-        if (!entry || entry.item.type !== "assistant_message") {
+      for (let index = timeline.rows.length - 1; index >= 0; index -= 1) {
+        const row = timeline.rows[index];
+        if (!row || row.item.type !== "assistant_message") {
           continue;
         }
-        const text = entry.item.text.trim();
+        const text = row.item.text.trim();
         if (text.length > 0) {
           return text;
         }

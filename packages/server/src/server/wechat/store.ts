@@ -128,6 +128,11 @@ export class WeChatStateStore {
     );
   }
 
+  async listPeerSessions(): Promise<WeChatPeerSessionRecord[]> {
+    await this.load();
+    return [...this.state.peerSessions].sort((left, right) => right.updatedAt.localeCompare(left.updatedAt));
+  }
+
   async upsertPeerSession(
     input: Omit<WeChatPeerSessionRecord, "createdAt" | "updatedAt"> & {
       createdAt?: string;

@@ -139,7 +139,7 @@ describe("PaseoWeChatService", () => {
         lastMessage: null,
       }),
       fetchTimeline: vi.fn().mockReturnValue({
-        entries: [
+        rows: [
           {
             item: {
               type: "assistant_message",
