@@ -22,11 +22,11 @@
 <p align="center">统一管理 Claude Code、Codex 和 OpenCode 代理的单一界面。</p>
 
 <p align="center">
-  <img src="https://paseo.sh/hero-mockup.png" alt="Paseo app screenshot" width="100%">
+  <img src="https://paseo.sh/hero-mockup.png" alt="Paseo 应用截图" width="100%">
 </p>
 
 <p align="center">
-  <img src="https://paseo.sh/mobile-mockup.png" alt="Paseo mobile app" width="100%">
+  <img src="https://paseo.sh/mobile-mockup.png" alt="Paseo 移动端应用" width="100%">
 </p>
 
 ---
@@ -34,7 +34,7 @@
 让多个代理在你自己的机器上并行运行。无论你在手机前还是电脑前，都能随时推进工作。
 
 - **自托管：** 代理直接运行在你的机器上，使用你现有的开发环境、工具、配置和技能。
-- **多 Provider：** 在同一个界面中统一接入 Claude Code、Codex 和 OpenCode，为不同任务选择合适的模型。
+- **多 Provider：** 在同一个界面中统一接入 Claude Code、Codex 和 OpenCode，为不同任务选择合适的模型与代理。
 - **语音控制：** 可通过语音输入任务或边说边梳理问题，需要时可以解放双手。
 - **跨设备：** 支持 iOS、Android、桌面端、Web 和 CLI。你可以在桌面上开始任务，在手机上查看进度，也可以在终端里脚本化操作。
 - **隐私优先：** Paseo 不包含遥测、追踪或强制登录。
@@ -121,17 +121,17 @@ curl -X POST http://127.0.0.1:6767/api/wechat/login/wait \\
 curl http://127.0.0.1:6767/api/wechat/accounts
 ```
 
-如果你已经装好了 CLI，也可以直接在终端里扫码登录：
+如果你已经装好了 CLI，也可以直接在终端中扫码登录：
 
 ```bash
-# 子命令形式
+# 子命令方式
 paseo wechat login
 
 # 顶层快捷命令
 paseo wechat-login
 ```
 
-如果 daemon 不在默认地址：
+如果 daemon 不在默认地址，可以显式指定：
 
 ```bash
 paseo wechat-login --host 127.0.0.1:6767
@@ -152,22 +152,22 @@ paseo wechat sessions
 应用里能做的事情，基本都可以在终端里完成。
 
 ```bash
-paseo run --provider claude/opus-4.6 "implement user authentication"
-paseo run --provider codex/gpt-5.4 --worktree feature-x "implement feature X"
+paseo run --provider claude/opus-4.6 "实现用户认证"
+paseo run --provider codex/gpt-5.4 --worktree feature-x "实现功能 X"
 
-paseo ls                           # 列出正在运行的代理
-paseo attach abc123                # 实时查看输出流
-paseo send abc123 "also add tests" # 继续补充后续任务
+paseo ls                       # 列出正在运行的代理
+paseo attach abc123            # 实时查看输出流
+paseo send abc123 "顺便补上测试" # 继续追加后续任务
 
 # 在远程 daemon 上运行
-paseo --host workstation.local:6767 run "run the full test suite"
+paseo --host workstation.local:6767 run "运行完整测试套件"
 ```
 
 更多内容请参考 [完整 CLI 文档](https://paseo.sh/docs/cli)。
 
 ## 编排技能（不稳定）
 
-这里提供了一些实验性技能，教代理如何使用 Paseo CLI 去编排其他代理。我还在持续快速迭代这些技能，接口和行为可能随时变化，也可能和我自己的使用环境耦合，请自行评估风险。
+这里提供了一些实验性技能，用来教代理如何通过 Paseo CLI 编排其他代理。我还在持续快速迭代这些技能，接口和行为可能随时变化，也可能和我自己的使用环境耦合，请自行评估风险。
 
 ```bash
 npx skills add getpaseo/paseo
@@ -176,24 +176,24 @@ npx skills add getpaseo/paseo
 然后你就可以在任意代理对话中这样使用：
 
 ```bash
-# handoff 适合你先和一个代理讨论，再把实现工作交给另一个代理。
+# handoff 适合先和一个代理讨论，再把实现工作交给另一个代理。
 # 例如先用 Claude 做规划，再交给 Codex 实现。
-/paseo-handoff hand off the authentication fix to codex 5.4 in a worktree
+/paseo-handoff 把认证修复任务交给 codex 5.4，在 worktree 里完成
 
 # loop 适合有明确验收标准的循环任务（也就是 Ralph loops）。
-/paseo-loop loop a codex agent to fix the backend tests, use sonnet to verify, max 10 iterations
+/paseo-loop 循环运行一个 codex agent 来修复后端测试，用 sonnet 做校验，最多 10 轮
 
 # orchestrator 用于拉起一个团队，并通过聊天室协调多个代理协作。
-# 这个模式偏强约束，默认假设 Claude 和 Codex 都可用。
-/paseo-orchestrator spin up a team to implement the database refactor, use chat to coordinate. use claude to plan and codex to implement and review
+# 这个模式约束更强，默认假设 Claude 和 Codex 都可用。
+/paseo-orchestrator 拉起一个团队来完成数据库重构，用聊天协调；用 claude 做规划，用 codex 做实现和 review
 ```
 
 ## 开发
 
-Monorepo 中各主要包的职责如下：
+Monorepo（单仓库）中各主要包的职责如下：
 - `packages/server`: Paseo daemon，负责代理进程编排、WebSocket API 和 MCP 服务
 - `packages/app`: Expo 客户端（iOS、Android、Web）
-- `packages/cli`: `paseo` CLI，用于 daemon 和代理工作流操作
+- `packages/cli`: `paseo` CLI，用于 daemon 管理与代理工作流操作
 - `packages/desktop`: Electron 桌面应用
 - `packages/relay`: 用于远程连接的 Relay 包
 - `packages/website`: 官网与文档站点（`paseo.sh`）
