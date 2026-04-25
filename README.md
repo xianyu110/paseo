@@ -71,6 +71,7 @@ paseo
 完整安装与配置说明见：
 - [文档](https://paseo.sh/docs)
 - [配置参考](https://paseo.sh/docs/configuration)
+- [中文使用教程](docs/PASEO_USAGE_GUIDE_ZH.md)
 
 ## 命令行（CLI）
 
